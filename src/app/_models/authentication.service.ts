@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http'
 import { Observable, of } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { Router } from '@angular/router'
-import { User } from 'user'
+import { User, Signup, login } from '../_models/user'
+import axios from 'axios'
 
 export interface UserDetails {
 	id:number
@@ -43,18 +44,20 @@ export interface PackagePayload{
     package_img:string
 }
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class AuthenticationService{
 	private token:string
 	ServerUrl = 'http://localhost:8000'; 
 	constructor(private http:HttpClient, private router: Router){}
 
-	private saveToken(token:string):void {
+	public saveToken(token:string):void {
 		localStorage.setItem('usertoken', token)
 		this.token = token
 	}
 
-	private getToken(): string{
+	public getToken(): string{
 		if(!this.token){
 			this.token = localStorage.getItem('usertoken')
 		}
@@ -65,7 +68,7 @@ export class AuthenticationService{
 		const token = this.getToken()
 		let payload
 		if(token != null){
-			console.log(token);
+			//console.log(token);
 			payload = token.split('.')[1]
 			payload = window.atob(payload)
 			return JSON.parse(payload)
@@ -84,35 +87,6 @@ export class AuthenticationService{
 		}
 	}
 
-	public register(user: User): Observable<any> {
-		console.log(user)
-		return this.http.post( this.ServerUrl+`/api/register`, user, {
-			headers:{ 'Content-Type' : 'application/json'}
-		})
-	}
-
-	public login(user: User): Observable<any> {
-		 
-		const base = this.http.post(
-				this.ServerUrl+`/api/login`,
-				{email :user.email, password:user.password },
-				{
-					headers: { 'Content-Type' : 'application/json' }
-				}
-			)
-		console.log(user)
-
-		const request = base.pipe(
-			map((data:TokenResponse) => {
-				if(data.token){
-					this.saveToken(data.token)
-				}
-				return data
-			})
-		)
-		return request
-	}
-
 	public profile(): Observable<any> {
 		return this.http.get(this.ServerUrl+`/api/profile`,{
 			headers : { Authorization: `Bearer ${this.getToken()}`}
@@ -125,20 +99,33 @@ export class AuthenticationService{
 		this.router.navigateByUrl('/')
 	}
 
-	public createPackage(package_data: PackagePayload): Observable<any> {
-		console.log(package_data)
-		return this.http.post( this.ServerUrl+`/api/package/create`, package_data, {
-			headers:{ 'Content-Type' : 'application/json', Authorization: `Bearer ${this.getToken()}`}
+	public register(user: Signup): Observable<any> {
+		console.log(user)
+		return this.http.post( this.ServerUrl+`/api/register`, user, {
+			headers:{ 'Content-Type' : 'application/json' }
 		})
 	}
 
-	public listPackage(): Observable<any> {
-		return this.http.get(this.ServerUrl+`/api/package/list`,{
-			headers : { Authorization: `Bearer ${this.getToken()}`}
-		})
-		
+	public login(user: login): Observable<any> {
+		const base = this.http.post(
+				this.ServerUrl+`/api/login`,
+				{email :user.email, password:user.password },
+				{
+					headers: { 'Content-Type' : 'application/json' }
+				}
+			)
+	
+		const request = base.pipe(
+			map((data:TokenResponse) => {
+				if(data.token){
+					this.saveToken(data.token)
+				}
+				console.log(data);
+				console.log(this.getToken());
+				return data
+			})
+		)
+		return request
 	}
-
-
 
 }

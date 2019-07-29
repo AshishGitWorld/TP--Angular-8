@@ -32,8 +32,11 @@
             </ul>
           </li>
           <li><a href="#contact">Contact Us</a></li>
-          <li><a [routerLink]="['login']">Login</a></li>
-          <li><a [routerLink]="['signup']">Signup</a></li>
+
+          <li><a *ngIf="!auth.isLoggedIn()" [routerLink]="['login']">Login</a></li>
+          <li><a *ngIf="!auth.isLoggedIn()" [routerLink]="['signup']">Signup</a></li>
+          
+          <li><a *ngIf="auth.isLoggedIn()" [routerLink]="['logout']">Logout</a></li>
 
         </ul>
       </nav><!-- #nav-menu-container -->

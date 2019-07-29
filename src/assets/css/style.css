@@ -90,6 +90,9 @@ h1, h2, h3, h4, h5, h6 {
   right: 0;
   transition: all 0.5s;
   z-index: 997;
+  background-color: #54595b;
+  opacity: 0.8;
+
 }
 
 #header #logo {
@@ -458,6 +461,7 @@ h1, h2, h3, h4, h5, h6 {
   position: fixed;
   background: rgba(52, 59, 64, 0.9);
   display: none;
+  opacity: 0.6;
 }
 
 /* Mobile Nav body classes */

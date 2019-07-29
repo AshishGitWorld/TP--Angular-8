@@ -2,7 +2,9 @@
     <div class="hero-container">
       <h1>Welcome to Trip Partner</h1>
       <h2>Accept the offer and celebrate your trip with your own team.</h2>
-      <a href="#about" class="btn-get-started">Get Started</a>
+      <a  *ngIf="auth.isLoggedIn()" [routerLink]="['/dashboard']" class="btn-get-started">Get Started</a>
+      <a  *ngIf="!auth.isLoggedIn()" [routerLink]="['/login']" class="btn-get-started">Get Started</a>
+
     </div>
   </section><!-- #hero -->
 

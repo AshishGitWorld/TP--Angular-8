@@ -12,14 +12,15 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { LogoutComponent } from './logout/logout.component';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { HttpClientModule } from '@angular/common/http';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
-// const routes: Routes = [
-//   {path:"", redirectTo:"/home", pathMatch:"full"},
-//   {path:"home", component:HomeComponent},
-//   {path:"login",component:LoginComponent},  
-  
-
-// ]
+import { AuthenticationService } from './_models/authentication.service';
+import { AuthGuardService } from './_models/auth-gaurd.service';
+import { TripDetailComponent } from './trip-detail/trip-detail.component';
+import { AddTripComponent } from './add-trip/add-trip.component';
+// import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+// import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -29,17 +30,23 @@ import { NgxSpinnerModule } from "ngx-spinner";
     HomeComponent,
     LoginComponent,
     SignupComponent,
-    LogoutComponent
+    LogoutComponent,
+    DashboardComponent,
+    TripDetailComponent,
+    AddTripComponent,
+    // BrowserAnimationsModule,
+    // MatButtonModule, MatCheckboxModule
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgxSpinnerModule,
     FormsModule,
-    ReactiveFormsModule 
-    // RouterModule.forRoot(routes)
+    ReactiveFormsModule,
+    HttpClientModule
+    //RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [AuthenticationService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
